@@ -176,7 +176,7 @@ class Compiler
 			+ array_intersect_key($this->config, self::$reserved);
 
 		foreach ($first = $this->getExtensions(Extensions\ExtensionsExtension::class) as $name => $extension) {
-			$extension->setConfig(isset($this->config[$name]) ? $this->config[$name] : []);
+			$extension->setConfig($this->config[$name] ?? []);
 			$extension->loadConfiguration();
 		}
 

@@ -211,7 +211,7 @@ class ServiceDefinition
 	 */
 	public function getTag($tag)
 	{
-		return isset($this->tags[$tag]) ? $this->tags[$tag] : NULL;
+		return $this->tags[$tag] ?? NULL;
 	}
 
 

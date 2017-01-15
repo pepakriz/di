@@ -63,7 +63,7 @@ class ContainerBuilder
 		if (!is_string($name) || !$name) { // builder is not ready for falsy names such as '0'
 			throw new Nette\InvalidArgumentException(sprintf('Service name must be a non-empty string, %s given.', gettype($name)));
 		}
-		$name = isset($this->aliases[$name]) ? $this->aliases[$name] : $name;
+		$name = $this->aliases[$name] ?? $name;
 		if (isset($this->definitions[$name])) {
 			throw new Nette\InvalidStateException("Service '$name' has already been added.");
 		}
@@ -85,7 +85,7 @@ class ContainerBuilder
 	public function removeDefinition($name)
 	{
 		$this->classListNeedsRefresh = TRUE;
-		$name = isset($this->aliases[$name]) ? $this->aliases[$name] : $name;
+		$name = $this->aliases[$name] ?? $name;
 		unset($this->definitions[$name]);
 	}
 
@@ -97,7 +97,7 @@ class ContainerBuilder
 	 */
 	public function getDefinition($name)
 	{
-		$service = isset($this->aliases[$name]) ? $this->aliases[$name] : $name;
+		$service = $this->aliases[$name] ?? $name;
 		if (!isset($this->definitions[$service])) {
 			throw new MissingServiceException("Service '$name' not found.");
 		}
@@ -122,7 +122,7 @@ class ContainerBuilder
 	 */
 	public function hasDefinition($name)
 	{
-		$name = isset($this->aliases[$name]) ? $this->aliases[$name] : $name;
+		$name = $this->aliases[$name] ?? $name;
 		return isset($this->definitions[$name]);
 	}
 
@@ -752,7 +752,7 @@ class ContainerBuilder
 			}
 			return $res;
 		}
-		$service = isset($this->aliases[$service]) ? $this->aliases[$service] : $service;
+		$service = $this->aliases[$service] ?? $service;
 		if (!isset($this->definitions[$service])) {
 			throw new ServiceCreationException("Reference to missing service '$service'.");
 		}

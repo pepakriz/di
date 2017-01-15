@@ -64,7 +64,7 @@ class Container
 			throw new Nette\InvalidArgumentException(sprintf('Service name must be a non-empty string, %s given.', gettype($name)));
 
 		}
-		$name = isset($this->meta[self::ALIASES][$name]) ? $this->meta[self::ALIASES][$name] : $name;
+		$name = $this->meta[self::ALIASES][$name] ?? $name;
 		if (isset($this->registry[$name])) {
 			throw new Nette\InvalidStateException("Service '$name' already exists.");
 
@@ -87,7 +87,7 @@ class Container
 	 */
 	public function removeService($name)
 	{
-		$name = isset($this->meta[self::ALIASES][$name]) ? $this->meta[self::ALIASES][$name] : $name;
+		$name = $this->meta[self::ALIASES][$name] ?? $name;
 		unset($this->registry[$name]);
 	}
 
@@ -137,7 +137,7 @@ class Container
 	 */
 	public function hasService($name)
 	{
-		$name = isset($this->meta[self::ALIASES][$name]) ? $this->meta[self::ALIASES][$name] : $name;
+		$name = $this->meta[self::ALIASES][$name] ?? $name;
 		return isset($this->registry[$name])
 			|| (method_exists($this, $method = self::getMethodName($name))
 				&& (new \ReflectionMethod($this, $method))->getName() === $method);
@@ -154,7 +154,7 @@ class Container
 		if (!$this->hasService($name)) {
 			throw new MissingServiceException("Service '$name' not found.");
 		}
-		$name = isset($this->meta[self::ALIASES][$name]) ? $this->meta[self::ALIASES][$name] : $name;
+		$name = $this->meta[self::ALIASES][$name] ?? $name;
 		return isset($this->registry[$name]);
 	}
 
@@ -167,7 +167,7 @@ class Container
 	 */
 	public function createService($name, array $args = [])
 	{
-		$name = isset($this->meta[self::ALIASES][$name]) ? $this->meta[self::ALIASES][$name] : $name;
+		$name = $this->meta[self::ALIASES][$name] ?? $name;
 		$method = self::getMethodName($name);
 		if (isset($this->creating[$name])) {
 			throw new Nette\InvalidStateException(sprintf('Circular reference detected for services: %s.', implode(', ', array_keys($this->creating))));
@@ -235,7 +235,7 @@ class Container
 	 */
 	public function findByTag($tag)
 	{
-		return isset($this->meta[self::TAGS][$tag]) ? $this->meta[self::TAGS][$tag] : [];
+		return $this->meta[self::TAGS][$tag] ?? [];
 	}
 
 
