@@ -27,7 +27,7 @@ register_shutdown_function(function () {
 
 class Notes
 {
-	static public $notes = [];
+	public static $notes = [];
 
 	public static function add($message)
 	{
